@@ -47,7 +47,7 @@ body {
 	margin-bottom: 5em;
 }
 
-.form-group > input {
+.form-group>input {
 	padding: 1.3em;
 }
 
@@ -66,6 +66,8 @@ body {
 
 .form-control {
 	font-family: NotoSansKR;
+	border: 3px solid #d2d2d2;
+	border-radius: 0.5em;
 }
 
 #none-id {
@@ -101,13 +103,67 @@ a:active {
 	color: #3b9c89;
 }
 </style>
+<script type="text/javascript">
+	$("document").ready(function() {
+    $("form").submit(function(e){
+			pwd = $("#pwd").val();
+			chk = $("#pwdCheck").val();
+			
+			if (pwd != chk) {
+    		alert("비밀번호를 확인해주세요.");
+       	e.preventDefault(e);
+   		}
+    });
+		$("#pwd").on("change keyup paste", function() {
+			pwd = $("#pwd").val();
+			chk = $("#pwdCheck").val();
+
+			if (pwd != chk) {
+				$("#pwd").css({
+					"border" : "3px solid red"
+				});
+				$("#pwdCheck").css({
+					"border" : "3px solid red"
+				});
+			} else {
+				$("#pwd").css({
+					"border" : "3px solid #d2d2d2"
+				});
+				$("#pwdCheck").css({
+					"border" : "3px solid #d2d2d2"
+				});
+			}
+		});
+		$("#pwdCheck").on("change keyup paste", function() {
+			pwd = $("#pwd").val();
+			chk = $("#pwdCheck").val();
+
+			if (pwd != chk) {
+				$("#pwd").css({
+					"border" : "3px solid red"
+				});
+				$("#pwdCheck").css({
+					"border" : "3px solid red"
+				});
+			} else {
+				$("#pwd").css({
+					"border" : "3px solid #d2d2d2"
+				});
+				$("#pwdCheck").css({
+					"border" : "3px solid #d2d2d2"
+				});
+			}
+		});
+	})
+</script>
 </head>
 <body>
 	<div id="loginForm">
 		<div id="logo">
-			<a href="./index.jsp"><img src="./resource/logo.png" style="margin-top: 5em;"></a>
+			<a href="./index.jsp"><img src="./resource/logo.png"
+				style="margin-top: 5em;"></a>
 		</div>
-		<form action="loginPro.jsp" method="post">
+		<form action="signUpPro.jsp" method="post">
 			<div class="form-group">
 				<input type="text" class="form-control" id="id" name="id"
 					placeholder="아이디">
@@ -117,8 +173,8 @@ a:active {
 					placeholder="비밀번호">
 			</div>
 			<div class="form-group">
-				<input type="password" class="form-control" id="pwd" name="pwd"
-					placeholder="비밀번호 확인">
+				<input type="password" class="form-control" id="pwdCheck"
+					name="pwdCheck" placeholder="비밀번호 확인">
 			</div>
 			<div class="form-group">
 				<input type="text" class="form-control" id="name" name="name"

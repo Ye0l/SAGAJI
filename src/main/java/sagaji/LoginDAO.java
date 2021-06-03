@@ -48,11 +48,18 @@ public class LoginDAO {
 		Connection con = getConnection();
 		PreparedStatement pstmt = null;
 		
-		String sql = "SELECT PASSWORD FROM USERS WHERE USERID = '?' and password = '?'";
+		String sql = "SELECT COUNT(*) AS \"RESULT\" FROM USERS WHERE USERID = ? AND PASSWORD = ?";
 		
 		pstmt = con.prepareStatement(sql);
 		pstmt.setString(1,  dto.getId());
 		pstmt.setString(2,  dto.getPwd());
+		
+		ResultSet rs = pstmt.executeQuery();
+		
+		if(rs.next() && rs.getInt("RESULT") == 1)
+			return true;
+		else
+			return false;
 	}
 
 	public ArrayList<LoginDTO> listLogin() throws ClassNotFoundException, SQLException {

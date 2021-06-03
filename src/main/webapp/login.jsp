@@ -65,6 +65,7 @@ body {
 
 .form-control {
 	font-family: NotoSansKR;
+	border-radius: 0.5em;
 }
 
 #none-id {
