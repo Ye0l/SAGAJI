@@ -1,10 +1,11 @@
-<%@page import="sagaji.BookDAO"%>
-<%@page import="sagaji.BookDTO"%>
+<%@page import="sagaji.ReportDAO"%>
+<%@page import="sagaji.ReportDTO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%
-	String bookid = request.getParameter("bookid");
-	BookDTO dto = new BookDAO().getBook(bookid);
+	String reportid = request.getParameter("reportid");
+	ReportDAO dao = new ReportDAO();
+	ReportDTO dto = dao.getReport(reportid);
 %>
 <!DOCTYPE html>
 <html lang="en" style="overflow-y: scroll;">
@@ -187,37 +188,28 @@ a {
 	</div>
 	<div class="container">
 		<div class="row">
-			<div class="col-auto" style="text-align: center;">
-				<a href="detail.jsp?bookid=<%=dto.getBookid() %>">
-					<img src="books/<%=dto.getBookid() %>.png" width="200px" height="300px" style="border: solid 1px black;">
-				</a>
+			<div class="col-auto">
+				<h2>독후감상문</h2><hr>
 			</div>
-			<div class="col-8" style="font-family: 'NotoSansKR'">
-				<div class="row" style="font-size: 20px; font-weight: bold;"><%=dto.getBookname() %></div>
-				<hr>
-				<div class="row"><div style="padding: 0">저자: <b><%=dto.getAuthor() %></b></div></div>
-				<div class="row"><div style="padding: 0">출판: <b><%=dto.getCompany() %></b></div></div>
-				<div class="row"><%=dto.getStory() %></div>
-			</div>
-		</div><hr>
-		<div class="row"><h2>WRITE REVIEW</h2></div>
+		</div>
 		<div class="row">
-			<div class="mb-3">
-			  <label for="exampleFormControlInput1" class="form-label">작성자: <%=session.getAttribute("id") %></label>
-			</div>
-			<form action="./reviewPro.jsp" method="post">
-				<div class="mb-3">
-				  <label for="exampleFormControlTextarea1" class="form-label">Review</label>
-				  <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" maxlength="200" name="contents"></textarea>
-				  <input type="hidden" name="bookid" value="<%=bookid%>">
+			<div class="col-12">
+				<div class="card" style="width: 100%;">
+				  <div class="card-body">
+				  	<a href="detail.jsp?bookid=<%=dto.getBookid()%>">
+					  	<div style="max-height: 600px; overflow: hidden;">
+					  		<img src="./books/<%=dto.getBookid() %>.png" class="card-img-top" style="width: 100%; margin-top: -10%; filter: blur(10px); -webkit-filter: blur(10px);">
+					  	</div>
+				  	</a>
+				    <h5 class="card-title"><%=dto.getBookname() %></h5>
+				    <h6 class="card-subtitle mb-2 text-muted"><%=dto.getUserid() %></h6>
+				    <h6 class="card-subtitle mb-2 text-muted"><%=dto.getDate() %></h6>
+				    <p class="card-text"><%=dto.getContents() %></p>
+				  </div>
 				</div>
-		  	<div class="d-grid gap-2">
-		  		<button class="btn btn-outline-primary" type="submit">SEND</button>
-		  	</div>
-			</form>
+			</div>
 		</div>
 	</div>
-
 	<div class="row" style="z-index: 2">
 		<div id="footer" style="z-index: 3"></div>
 	</div>

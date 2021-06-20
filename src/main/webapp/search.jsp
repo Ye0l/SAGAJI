@@ -194,8 +194,8 @@ body {
 			</div>
 			<ul class="menu">
 				<li><h5><a href="./index.jsp">메인</a></h5></li>
-				<li><h5><a href="./classification.jsp?auth=&comp=&genre=">분류별 도서</a></h5></li>
-				<li><h5><a href="./report.jsp">독후감상문</a></h5></li>
+				<li><h5><a href="./classification.jsp?p=1&auth=&comp=&genre=">분류별 도서</a></h5></li>
+				<li><h5><a href="./report.jsp?p=1">독후감상문</a></h5></li>
 			</ul>
 		</div>
 		<div class="col" style="height: 20em;">

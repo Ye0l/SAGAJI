@@ -24,7 +24,7 @@ create sequence book_id_seq start with 10000 increment by 1 maxvalue 9999999 cyc
 drop sequence book_id_seq;
 delete from books;
 
-select * from books;
+select * from books where bookname like '%%';
 SELECT * FROM (SELECT ROWNUM NUM, RS.* FROM(SELECT * FROM BOOKS WHERE BOOKNAME LIKE '%a%' OR AUTHOR LIKE '%a%') "RS") WHERE NUM BETWEEN 11 AND 20;
 SELECT * FROM (SELECT ROWNUM NUM, RS.* FROM(SELECT * FROM BOOKS WHERE BOOKNAME LIKE '%a%' OR AUTHOR LIKE '%a%') "RS") WHERE NUM BETWEEN 11 AND 20;
 SELECT count(*) "COUNT" FROM BOOKS WHERE BOOKNAME LIKE '%a%' OR AUTHOR LIKE '%a%';
@@ -37,6 +37,7 @@ create table reports(
     books_bookid references books(bookid),
     users_userid references users(userid)
 );
+select r.*, (select bookname from books b where b.bookid = r.books_bookid) bookname from reports r;
 delete from reports;
 drop sequence reports_id_seq;
 create sequence reports_id_seq start with 10000 increment by 1 maxvalue 9999999 cycle nocache;
@@ -66,7 +67,7 @@ create table comments(
 );
 delete from comments;
 INSERT INTO COMMENTS(COMMENTID, CONTENTS, USERS_USERID, REVIEW_REVIEWID)
-VALUES(comments_id_seq, 'TEST', 'ADMIN', 4852);
+VALUES(comments_id_seq.nextval, 'TEST', 'admin', 4852);
 
 create sequence comments_id_seq start with 10000 increment by 1 maxvalue 9999999 cycle nocache;
 drop sequence comments_id_seq;

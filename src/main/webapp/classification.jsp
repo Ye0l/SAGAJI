@@ -11,17 +11,9 @@
 	String auth = request.getParameter("auth");
 	String comp = request.getParameter("comp");
 	String genre = request.getParameter("genre");
+	int p = Integer.parseInt(request.getParameter("p"));
 	
-	String search = ""; 
-	int p = 1;
-	
-	try {
-		p = Integer.parseInt(request.getParameter("p"));
-	} catch (Exception e) {
-		log("", e);
-	}
-	
-	ArrayList<BookDTO> dtos = cDAO.getClassifyBook(auth, comp, genre);
+	ArrayList<BookDTO> dtos = cDAO.getClassifyBook(p, auth, comp, genre);
 	int searchCount = cDAO.getClassifyCount(auth, comp, genre);
 %>
 <!DOCTYPE html>
@@ -199,8 +191,8 @@ body {
 			</div>
 			<ul class="menu">
 				<li><h5><a href="./index.jsp">메인</a></h5></li>
-				<li><h5><a href="./classification.jsp?auth=&comp=&genre=">분류별 도서</a></h5></li>
-				<li><h5><a href="./report.jsp">독후감상문</a></h5></li>
+				<li><h5><a href="./classification.jsp?p=1&auth=&comp=&genre=">분류별 도서</a></h5></li>
+				<li><h5><a href="./report.jsp?p=1">독후감상문</a></h5></li>
 			</ul>
 		</div>
 		<div class="col" style="height: 20em;">
@@ -229,6 +221,7 @@ body {
 						<option value="<%=item%>" <%=item.equals(genre) ? "selected" : "" %>><%=item%></option>
 						<% } %>
 					</select>
+					<input type="hidden" name="p" value="1">
 					<div class="d-grid gap-2">
 						<button class="btn btn-outline-primary" type="submit">SEARCH</button>
 					</div>
@@ -267,9 +260,9 @@ body {
 			  <% } 
 			  for(int i = 0; i <= (int)searchCount/5; i++) { 
 			  	if(p==(i+1)) {%>
-			  	<li class="page-item active"><a class="page-link" href="./search.jsp?p=<%=i+1 %>&auth=<%=auth %>&comp=<%=comp %>&genre=<%=genre %>"><%=i+1 %></a></li>
+			  	<li class="page-item active"><a class="page-link" href="./classification.jsp?p=<%=i+1 %>&auth=<%=auth %>&comp=<%=comp %>&genre=<%=genre %>"><%=i+1 %></a></li>
 			  	<%} else {%>
-			  	<li class="page-item"><a class="page-link" href="./search.jsp?search=p=<%=i+1 %>&auth=<%=auth %>&comp=<%=comp %>&genre=<%=genre %>"><%=i+1 %></a></li>
+			  	<li class="page-item"><a class="page-link" href="./classification.jsp?p=<%=i+1 %>&auth=<%=auth %>&comp=<%=comp %>&genre=<%=genre %>"><%=i+1 %></a></li>
 			  <% }} %>
 			  <% if(p==((int)searchCount/5+1)) { %>
 			    <li class="page-item disabled">
@@ -277,7 +270,7 @@ body {
 			    </li>
 			  <% } else {%>
 			    <li class="page-item">
-			      <a class="page-link" href="./search.jsp?p=<%=p+1 %>&auth=<%=auth %>&comp=<%=comp %>&genre=<%=genre %>">Next</a>
+			      <a class="page-link" href="./classification.jsp?p=<%=p+1 %>&auth=<%=auth %>&comp=<%=comp %>&genre=<%=genre %>">Next</a>
 			    </li>
 			  <% }%>
 			  </ul>

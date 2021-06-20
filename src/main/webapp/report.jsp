@@ -1,7 +1,14 @@
+<%@page import="sagaji.ReportDAO"%>
+<%@page import="sagaji.ReportDTO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%
+	ReportDAO dao = new ReportDAO();
+	int p = Integer.parseInt(request.getParameter("p"));
+	int searchCount = dao.getReportCount();
+%>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="overflow-y: scroll;">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -23,7 +30,7 @@
 }
 
 * {
-	/* border: solid 1px blue; */
+	font-family: 'NotoSansKR';
 	
 }
 
@@ -169,21 +176,100 @@ a {
 			</div>
 			<ul class="menu">
 				<li><h5><a href="./index.jsp">메인</a></h5></li>
-				<li><h5><a href="./classification.jsp?auth=&comp=&genre=">분류별 도서</a></h5></li>
-				<li><h5><a href="./report.jsp">독후감상문</a></h5></li>
+				<li><h5><a href="./classification.jsp?p=1&auth=&comp=&genre=">분류별 도서</a></h5></li>
+				<li><h5><a href="./report.jsp?p=1">독후감상문</a></h5></li>
 			</ul>
 		</div>
 		<div class="col" style="height: 20em;">
 			<div id="banner"></div>
 		</div>
-	</div>	
-	<div class="container">
+	</div>
+	<div class="container" style="margin-bottom: 5em;">
 		<div class="row">
-			독후감상문
+			<h2>독후감상문</h2>
+		</div>
+		<div class="row">
+			<table class="table table-hover">
+				<thead>
+				  <tr>
+				  	<th>
+				  		reportNo
+				  	</th>
+				  	<th>
+				  		Writer
+				  	</th>
+				  	<th>
+				  		BookTitle
+				  	</th>
+				  	<th>
+				  		writeTime
+				  	</th>
+				  </tr>
+			  </thead>
+			  <tbody>
+			  <%for(ReportDTO item : dao.getReportList(p)) {%>
+				  <tr>
+				  	<td>
+				  		<a href="./reportDetail.jsp?reportid=<%=item.getReportid()%>">
+					  	<%=item.getReportid() %>
+					  	</a>
+				  	</td>
+				  	<td>
+				  		<%=item.getUserid() %>
+				  	</td>
+				  	<td>
+				  		<a href="./detail.jsp?bookid=<%=item.getBookid()%>">
+				  			<%=item.getBookname() %>
+				  		</a>
+				  	</td>
+				  	<td>
+				  		<%=item.getDate() %>
+				  	</td>
+				  </tr>
+			  <% } %>
+				</tbody>
+			</table>
+			<div class="col-12" style="text-align: right;">
+				<% if(session.getAttribute("id") != null) { %>
+				<a href="./writeReport.jsp">
+					<button class="btn btn-primary">WRITE NEW REPORT</button>
+				</a>
+				<% } %>
+			</div>
+			<!-- 페이지네이션 -->
+			<nav aria-label="Page navigation example">
+			  <ul class="pagination justify-content-center">
+			  <% if(p==1) { %>
+			    <li class="page-item disabled">
+			      <a class="page-link" href="#" tabindex="-1">Previous</a>
+			    </li>
+			  <% } else { %>
+			    <li class="page-item">
+			      <a class="page-link" href="./report.jsp?p=<%=p-1 %>" tabindex="-1">Previous</a>
+			    </li>
+			  <% } 
+			  for(int i = 0; i <= searchCount/7; i++) { 
+			  	if(p==(i+1)) {%>
+			  	<li class="page-item active"><a class="page-link" href="./report.jsp?p=<%=i+1 %>"><%=i+1 %></a></li>
+			  	<%} else {%> 
+			  	<li class="page-item"><a class="page-link" href="./report.jsp?p=<%=i+1 %>"><%=i+1 %></a></li>
+			  <% }} %>
+			  <% if(p==(searchCount/7+1)) { %>
+			    <li class="page-item disabled">
+			      <a class="page-link" href="#">Next</a>
+			    </li>
+			  <% } else { %>
+			    <li class="page-item">
+			      <a class="page-link" href="./report.jsp?p=<%=p+1 %>">Next</a>
+			    </li>
+			  <% }%>
+			  </ul>
+			</nav>
+			<!-- 페이지네이션 끝 -->
 		</div>
 	</div>
-	<div class="row">
-		<div id="footer"></div>
+	<div class="row" style="z-index: 2">
+		<div id="footer" style="z-index: 3"></div>
 	</div>
 </body>
 </html>

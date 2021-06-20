@@ -59,20 +59,23 @@ public class classifyDAO extends LoginDAO{
 		return result;
 	}
 
-	public ArrayList<BookDTO> getClassifyBook(String auth, String comp, String genre) throws SQLException, ClassNotFoundException {
+	public ArrayList<BookDTO> getClassifyBook(int p, String auth, String comp, String genre) throws SQLException, ClassNotFoundException {
 		Connection con = getConnection();
 		PreparedStatement pstmt = null;
 		
-		String sql = "SELECT * FROM BOOKS WHERE BOOKNAME LIKE '%%'"
+		String sql = "SELECT * FROM(SELECT ROWNUM NUM, RS.* FROM(SELECT * FROM BOOKS WHERE BOOKNAME LIKE '%%'"
 				+ (auth.equals("") ? "" : " AND AUTHOR = ?")
 				+ (comp.equals("") ? "" : " AND COMPANY = ?")
-				+ (genre.equals("") ? "" : " AND GENRE = ?");
+				+ (genre.equals("") ? "" : " AND GENRE = ?")
+				+ ") RS) WHERE NUM BETWEEN ? AND ?";
 		
 		pstmt = con.prepareStatement(sql);
 		int i = 1;
 		if(!auth.equals("")) {pstmt.setString(i, auth); i++;}
 		if(!comp.equals("")) {pstmt.setString(i, comp); i++;}
 		if(!genre.equals("")) {pstmt.setString(i, genre); i++;}
+		pstmt.setInt(i++, (p-1)*5+1);
+		pstmt.setInt(i++, p*5);
 		
 		ResultSet rs = pstmt.executeQuery();
 		ArrayList<BookDTO> dtos = new ArrayList<BookDTO>();

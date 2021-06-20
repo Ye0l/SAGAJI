@@ -122,4 +122,24 @@ public class BookDAO extends LoginDAO{
 		
 		return dto;
 	}
+	
+	public ArrayList<BookDTO> getBookList() throws SQLException, ClassNotFoundException{
+		Connection con = getConnection();
+		Statement stmt = null;
+		
+		String sql = "select * from books order by bookname";
+		stmt = con.createStatement();
+		ResultSet rs = stmt.executeQuery(sql);
+		
+		ArrayList<BookDTO> dtos = new ArrayList<BookDTO>();
+		while(rs.next()) {
+			BookDTO dto = new BookDTO();
+			dto.setBookid(rs.getString("BOOKID"));
+			dto.setBookname(rs.getString("BOOKNAME"));
+			
+			dtos.add(dto);
+		}
+		
+		return dtos;
+	}
 }
