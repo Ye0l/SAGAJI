@@ -196,7 +196,7 @@ a {
 					<div class="col-4" style="font-family: 'NotoSansKR'">
 						<div><h4 style="font-weight: bold; font-family: 'NotoSansKR'; color: #1f5ec0"><%=todayBook.getBookname() %></h4></div>
 						<div><h5 style="font-weight: bold; font-family: 'NotoSansKR';"><%=todayBook.getAuthor() %></h5></div>
-						<%=todayBook.getStory() %>
+						<%=todayBook.getStory().length() > 500 ? todayBook.getStory().substring(0, 500) + " ..." : todayBook.getStory() %>
 					</div>
 				</div>
 			</div>

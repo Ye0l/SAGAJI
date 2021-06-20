@@ -1,3 +1,8 @@
+<%@page import="sagaji.CommentsDAO"%>
+<%@page import="sagaji.CommentsDTO"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="sagaji.ReviewDAO"%>
+<%@page import="sagaji.ReviewDTO"%>
 <%@page import="sagaji.BookDTO"%>
 <%@page import="sagaji.BookDAO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -6,6 +11,8 @@
 	String bookid = request.getParameter("bookid");
 	BookDAO dao = new BookDAO();
 	BookDTO dto = dao.getBook(bookid); 
+	ArrayList<ReviewDTO> rDtos = new ArrayList<ReviewDTO>();
+	ReviewDAO reviewDAO = new ReviewDAO();
 
 %>
 <!DOCTYPE html>
@@ -134,7 +141,7 @@ a {
 	font-family: 'NotoSansKR';
 }
 
-.menu li {
+.menu > li {
 	color:white;
 	float:left;
 	padding:20px 40px;
@@ -192,7 +199,7 @@ a {
 		<div class="row">
 			<div class="col-12" style="text-align: center;">
 				<h1 style="font-weight: bold;"><%=dto.getBookname() %></h1><br>
-				<h4><%=dto.getAuthor() %> 지음</h4>
+				<h4 style="font-weight: bold;"><%=dto.getAuthor() %> 지음</h4>
 			</div>
 		</div>
 		<div class="row">
@@ -201,8 +208,46 @@ a {
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-12">
+			<div class="col-8" style="margin: 0px auto">
 				<div><%=dto.getStory() %></div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-12">
+				<h5>Reviews</h5>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-12">
+				<ul class="list-group">
+					<% rDtos = reviewDAO.getReviewList(bookid);
+					for(ReviewDTO item : rDtos) { %>
+					<div class="list-group">
+					  <a class="list-group-item list-group-item-action">
+					    <div class="d-flex w-100 justify-content-between">
+					      <h5 class="mb-1"><%=item.getUserid() %></h5>
+					      <small class="text-muted">SCORE: <%=item.getRating() %>.0/5</small>
+					    </div>
+					    <p class="mb-1"><%=item.getContents() %></p>
+					    <%if(Integer.parseInt(item.getComments()) > 0) { %>
+					    	<span class="badge rounded-pill bg-light text-dark">
+						    	<% ArrayList<CommentsDTO> cDtos = new CommentsDAO().getComments(item.getReviewid()); 
+						    	for(CommentsDTO comment : cDtos) {%>
+						    	<h6>
+								    <span class="badge rounded-pill bg-light text-dark"><%=comment.getUserid() %></span>
+								    <span class="badge rounded-pill bg-light text-dark"><%=comment.getContents() %></span>
+								    <span class="badge rounded-pill bg-light text-dark"><%=comment.getWritetime() %></span>
+							    </h6>
+						    	<% } %>
+					    	</span>
+					    <% } %>
+					    <div class="col-12">
+					    	<h6><button class="btn btn-secondary" type="button">write comments</button></h6>
+					    </div>
+					  </a>
+					</div>
+				  <% } %>
+				</ul>
 			</div>
 		</div>
 	</div>

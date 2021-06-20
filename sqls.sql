@@ -5,16 +5,18 @@ create table users(
 );
 
 select count(*) as "RESULT" from users where userid = 'TESTID' and password = 'name';
-SELECT * FROM USERS ORDER BY USERID;
+SELECT * FROM USERS;
 delete from users;
 commit;
+
+insert into users(userid, password, name) values('testest', 'asdasdsa', '한글이름');
 
 create table books(
     bookid number(10) primary key,
     bookname varchar2(50),
     author varchar2(50),
     company varchar2(50),
-    story varchar2(1000),
+    story varchar2(3000),
     genre varchar2(50),
     rating number(5)
 );
