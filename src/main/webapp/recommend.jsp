@@ -8,8 +8,7 @@
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css"
 	integrity="undefined" crossorigin="anonymous">
-<title>index</title>
-<style>
+<title>index</title><style>
 @font-face {
 	font-family: 'NotoSansKR'; /*글꼴*/
 	src: local('NotoSansKR'), url('./fonts/NotoSansKR-Regular.otf')
@@ -148,7 +147,6 @@ a:active {
 </head>
 <body>
 	<div class="row">
-		
 		<a href="./index.jsp">
 			<div id="box">
 				<img src="./resource/logo_box.png" style="margin: auto;">
@@ -181,22 +179,23 @@ a:active {
 	</div>	
 	<div class="container">
 		<div class="row">
-			<div class="col-12">
-				<div class="left">
-					<img src="./resource/book1.jpg">
-					
-				</div>
-			</div>
-		</div>
-		<div class="row">
-			<div class="col-12">
+			<div class="col-6">
 				<div class="input-group mb-3">
 					<input type="text" class="form-control" placeholder="도서명 검색"
 						aria-describedby="button-addon2">
 					<button class="btn btn-outline-secondary" type="button"
 						id="button-addon2">Search</button>
 				</div>
-			</div>	
+				<div>라디오박스 들어갈 칸</div>
+			</div>
+			<div class="col-6">
+				<div style="margin: auto;">분류 들어갈 칸</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-12">
+				검색내용 들어갈 칸
+			</div>
 		</div>
 	</div>
 	<div class="row">

@@ -105,7 +105,7 @@ a:active {
 <body>
 	<div id="loginForm">
 		<div id="logo">
-			<a href="./index.jsp"><img src="./resource/logo.png" style="margin-top: 5em;"></a>
+			<a href="./index.jsp"><img src="./resource/logo_login.png" style="margin-top: 2em;"></a>
 		</div>
 		<form action="loginPro.jsp" method="post">
 			<div class="form-group">

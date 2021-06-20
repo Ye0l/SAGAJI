@@ -10,10 +10,16 @@
 <%
 	LoginDTO dto = new LoginDTO(request.getParameter("id"), "name", request.getParameter("pwd"));
 	LoginDAO dao = new LoginDAO();
-	if(dao.login(dto))
+	if(dao.login(dto)) {
 		out.print("로그인 성공");
+		dto = dao.getUserProfile(dto);
+		session.setAttribute("id", dto.getId());
+		session.setAttribute("name", dto.getName());
+	}
 	else
 		out.print("로그인 실패");
+	
+	response.sendRedirect("index.jsp");
 %>
 </head>
 <body>

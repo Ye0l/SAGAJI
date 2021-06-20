@@ -6,8 +6,10 @@
 	LoginDTO dto = new LoginDTO(request.getParameter("id"), request.getParameter("name"), request.getParameter("pwd"));
 	LoginDAO dao = new LoginDAO();
 	dao.insertUser(dto);
-
-	response.sendRedirect("index.jsp");
+	
+	out.println("<script>alert('회원가입이 완료되었습니다.')</script>");
+	out.println("<script>location.href='./index.jsp'</script>");
+	// response.sendRedirect("index.jsp");
 %>
 <!DOCTYPE html>
 <html>

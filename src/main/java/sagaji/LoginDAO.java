@@ -61,6 +61,24 @@ public class LoginDAO {
 		else
 			return false;
 	}
+	
+	public LoginDTO getUserProfile(LoginDTO dto) throws SQLException, ClassNotFoundException {
+		Connection con = getConnection();
+		PreparedStatement pstmt = null;
+		
+		String sql = "SELECT * FROM USERS WHERE USERID = ? AND PASSWORD = ?";
+		
+		pstmt = con.prepareStatement(sql);
+		pstmt.setString(1,  dto.getId());
+		pstmt.setString(2,  dto.getPwd());
+		
+		ResultSet rs = pstmt.executeQuery();
+		
+		rs.next();
+		LoginDTO getDto = new LoginDTO(rs.getString("USERID"), rs.getString("NAME"), rs.getString("PASSWORD"));
+		
+		return getDto; 
+	}
 
 	public ArrayList<LoginDTO> listLogin() throws ClassNotFoundException, SQLException {
 		ArrayList<LoginDTO> dtos = new ArrayList<LoginDTO>();

@@ -148,7 +148,6 @@ a:active {
 </head>
 <body>
 	<div class="row">
-		
 		<a href="./index.jsp">
 			<div id="box">
 				<img src="./resource/logo_box.png" style="margin: auto;">
@@ -181,22 +180,7 @@ a:active {
 	</div>	
 	<div class="container">
 		<div class="row">
-			<div class="col-12">
-				<div class="left">
-					<img src="./resource/book1.jpg">
-					
-				</div>
-			</div>
-		</div>
-		<div class="row">
-			<div class="col-12">
-				<div class="input-group mb-3">
-					<input type="text" class="form-control" placeholder="도서명 검색"
-						aria-describedby="button-addon2">
-					<button class="btn btn-outline-secondary" type="button"
-						id="button-addon2">Search</button>
-				</div>
-			</div>	
+			독후감상문
 		</div>
 	</div>
 	<div class="row">

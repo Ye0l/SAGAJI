@@ -160,8 +160,8 @@ a:active {
 <body>
 	<div id="loginForm">
 		<div id="logo">
-			<a href="./index.jsp"><img src="./resource/logo.png"
-				style="margin-top: 5em;"></a>
+			<a href="./index.jsp"><img src="./resource/logo_signup.png"
+				style="margin-top: 2em;"></a>
 		</div>
 		<form action="signUpPro.jsp" method="post">
 			<div class="form-group">
