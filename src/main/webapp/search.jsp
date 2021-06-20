@@ -1,7 +1,17 @@
+<%@page import="java.util.ArrayList"%>
 <%@page import="sagaji.BookDTO"%>
 <%@page import="sagaji.BookDAO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+    pageEncoding="UTF-8"%>
+<%
+	request.setCharacterEncoding("utf-8");
+	String search = request.getParameter("search");
+	int p = Integer.parseInt(request.getParameter("p"));
+	BookDAO dao = new BookDAO();
+	int searchType = Integer.parseInt(request.getParameter("searchType"));
+	ArrayList<BookDTO> dtos = dao.searchBook(search, searchType, p);
+	int searchCount = dao.searchCount(search, searchType);
+%>
 <!DOCTYPE html>
 <html lang="en" style="overflow-y: scroll;">
 <head>
@@ -97,7 +107,7 @@ body {
 	overflow: hidden;
 }
 
-a {
+#nav-bar a {
 	text-decoration: none;
 }
 
@@ -147,6 +157,10 @@ a {
 	float:right;
 	padding: 0 1em;
 }
+
+.container .row {
+	margin: 1em;
+}
 </style>
 </head>
 <body>
@@ -182,46 +196,78 @@ a {
 			<div id="banner"></div>
 		</div>
 	</div>
-	<div class="container">
-		<div class="row">
-			<div class="col-12">
-				<% BookDTO todayBook = new BookDAO().getTodayRecommend(); %>
-				<div><h5 style="font-weight: bold; font-family: 'NotoSansKR'">오늘의 책 ></h5></div>
-				<div class="row">
-					<div class="col-2" style="text-align: center;">
-						<a href="detail.jsp?bookid=<%=todayBook.getBookid() %>">
-							<img src="./books/<%=todayBook.getBookid() %>.png" width="200px" height="300px">
-						</a>
-					</div>
-					<div class="col-4" style="font-family: 'NotoSansKR'">
-						<div><h4 style="font-weight: bold; font-family: 'NotoSansKR'; color: #1f5ec0"><%=todayBook.getBookname() %></h4></div>
-						<div><h5 style="font-weight: bold; font-family: 'NotoSansKR';"><%=todayBook.getAuthor() %></h5></div>
-						<%=todayBook.getStory() %>
-					</div>
-				</div>
-			</div>
-		</div>
+	<div class="container" style="z-index: 1">
 		<div class="row">
 			<div class="col-12">
 				<form action="./search.jsp" method="get">
 					<div class="input-group mb-3">
 						<input type="text" class="form-control" placeholder="도서명 검색"
-							aria-describedby="button-addon2" id="search" name="search">
+							aria-describedby="button-addon2" id="search" name="search" value="<%=search%>">
 						<button class="btn btn-outline-secondary" type="submit"
 							id="button-addon2">Search</button>
 						<input type="hidden" name="p" value="1">
 					</div>
 					<div style="font-family: 'NotoSansKR'">
-						<input type="radio" name="searchType" value="0" checked="checked">&nbsp;전체&nbsp;&nbsp;
-						<input type="radio" name="searchType" value="1">&nbsp;제목&nbsp;&nbsp;
-						<input type="radio" name="searchType" value="2">&nbsp;저자
+						<input type="radio" name="searchType" value="0" <%=searchType == 0 ? "checked=\"checked\"" : ""%>>&nbsp;전체&nbsp;&nbsp;
+						<input type="radio" name="searchType" value="1" <%=searchType == 1 ? "checked=\"checked\"" : ""%>>&nbsp;제목&nbsp;&nbsp;
+						<input type="radio" name="searchType" value="2" <%=searchType == 2 ? "checked=\"checked\"" : ""%>>&nbsp;저자
 					</div>
 				</form>
-			</div>	
+				<div class="row"><div><b><%=searchType == 0 ? "전체" : searchType == 1 ? "제목" : "저자" %></b> 검색어 <b>"<%=search%>"</b>에 대한 <b><%=searchCount %></b>개의 검색 결과가 있습니다.</div></div>
+			</div>
+			<!-- 검색결과부 -->
+			<% for(BookDTO dto : dtos) { %>
+			<div class="row">
+				<div class="col-4" style="text-align: center;">
+					<a href="detail.jsp?bookid=<%=dto.getBookid() %>">
+						<img src="books/<%=dto.getBookid() %>.png" width="200px" height="300px">
+					</a>
+				</div>
+				<div class="col-8" style="font-family: 'NotoSansKR'">
+					<div class="row" style="font-size: 20px; font-weight: bold;"><%=dto.getBookname() %></div>
+					<hr>
+					<div class="row"><div style="padding: 0">저자: <b><%=dto.getAuthor() %></b></div></div>
+					<div class="row"><div style="padding: 0">출판: <b><%=dto.getCompany() %></b></div></div>
+					<div class="row"><%=dto.getStory() %></div>
+				</div>
+			</div>
+			<hr>
+			<% } %>
+			<!-- 검색결과부 끝 -->
+			<!-- 페이지네이션 -->
+			<nav aria-label="Page navigation example">
+			  <ul class="pagination justify-content-center">
+			  <% if(p==1) { %>
+			    <li class="page-item disabled">
+			      <a class="page-link" href="#" tabindex="-1">Previous</a>
+			    </li>
+			  <% } else { %>
+			    <li class="page-item">
+			      <a class="page-link" href="./search.jsp?search=<%=search %>&p=<%=p-1 %>&searchType=<%=searchType %>" tabindex="-1">Previous</a>
+			    </li>
+			  <% } 
+			  for(int i = 0; i <= (int)searchCount/5; i++) { 
+			  	if(p==(i+1)) {%>
+			  	<li class="page-item active"><a class="page-link" href="./search.jsp?search=<%=search %>&p=<%=i+1 %>&searchType=<%=searchType %>"><%=i+1 %></a></li>
+			  	<%} else {%>
+			  	<li class="page-item"><a class="page-link" href="./search.jsp?search=<%=search %>&p=<%=i+1 %>&searchType=<%=searchType %>"><%=i+1 %></a></li>
+			  <% }} %>
+			  <% if(p==((int)searchCount/5+1)) { %>
+			    <li class="page-item disabled">
+			      <a class="page-link" href="#">Next</a>
+			    </li>
+			  <% } else {%>
+			    <li class="page-item">
+			      <a class="page-link" href="./search.jsp?search=<%=search %>&p=<%=p+1 %>&searchType=<%=searchType %>">Next</a>
+			    </li>
+			  <% }%>
+			  </ul>
+			</nav>
+			<!-- 페이지네이션 끝 -->
 		</div>
 	</div>
-	<div class="row">
-		<div id="footer"></div>
+	<div class="row" style="z-index: 2">
+		<div id="footer" style="z-index: 3"></div>
 	</div>
 </body>
 </html>

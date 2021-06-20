@@ -7,7 +7,7 @@ import java.util.ArrayList;
 public class LoginDAO {
 
 	// DB 연동 커넥션 얻기
-	public Connection getConnection() throws ClassNotFoundException, SQLException {
+	protected Connection getConnection() throws ClassNotFoundException, SQLException {
 		// 연결 정보와 SQL
 		String url = "jdbc:oracle:thin:@localhost:1521/xe";
 		String user = "system";
@@ -79,6 +79,8 @@ public class LoginDAO {
 		
 		return getDto; 
 	}
+	
+	// 여기서부터 아직 안쓴 코드
 
 	public ArrayList<LoginDTO> listLogin() throws ClassNotFoundException, SQLException {
 		ArrayList<LoginDTO> dtos = new ArrayList<LoginDTO>();

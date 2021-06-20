@@ -1,14 +1,23 @@
+<%@page import="sagaji.BookDTO"%>
+<%@page import="sagaji.BookDAO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+    pageEncoding="UTF-8"%>
+<%
+	String bookid = request.getParameter("bookid");
+	BookDAO dao = new BookDAO();
+	BookDTO dto = dao.getBook(bookid); 
+
+%>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="overflow-y: scroll;">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css"
 	integrity="undefined" crossorigin="anonymous">
-<title>index</title><style>
+<title>index</title>
+<style>
 @font-face {
 	font-family: 'NotoSansKR'; /*글꼴*/
 	src: local('NotoSansKR'), url('./fonts/NotoSansKR-Regular.otf')
@@ -28,6 +37,7 @@
 
 .container {
 	width: inherit;
+	margin-bottom: 5em;
 }
 
 .row {
@@ -147,6 +157,7 @@ a {
 </head>
 <body>
 	<div class="row">
+		
 		<a href="./index.jsp">
 			<div id="box">
 				<img src="./resource/logo_box.png" style="margin: auto;">
@@ -176,30 +187,27 @@ a {
 		<div class="col" style="height: 20em;">
 			<div id="banner"></div>
 		</div>
-	</div>	
-	<div class="container">
+	</div>
+	<div class="container" style="font-family: 'NotoSansKR'">
 		<div class="row">
-			<div class="col-6">
-				<div class="input-group mb-3">
-					<input type="text" class="form-control" placeholder="도서명 검색"
-						aria-describedby="button-addon2">
-					<button class="btn btn-outline-secondary" type="button"
-						id="button-addon2">Search</button>
-				</div>
-				<div>라디오박스 들어갈 칸</div>
+			<div class="col-12" style="text-align: center;">
+				<h1 style="font-weight: bold;"><%=dto.getBookname() %></h1><br>
+				<h4><%=dto.getAuthor() %> 지음</h4>
 			</div>
-			<div class="col-6">
-				<div style="margin: auto;">분류 들어갈 칸</div>
+		</div>
+		<div class="row">
+			<div class="col-12" style="text-align: center;">
+				<img src="./books/<%=dto.getBookid()%>.png" style="border: solid 1px black;">
 			</div>
 		</div>
 		<div class="row">
 			<div class="col-12">
-				검색내용 들어갈 칸
+				<div><%=dto.getStory() %></div>
 			</div>
 		</div>
 	</div>
-	<div class="row">
-		<div id="footer"></div>
+	<div class="row" style="z-index: 2">
+		<div id="footer" style="z-index: 3"></div>
 	</div>
 </body>
 </html>

@@ -98,19 +98,19 @@ a {
 	text-decoration: none;
 }
 
-a:link {
+#nav-bar a:link {
 	color: white;
 }
 
-a:visited {
+#nav-bar a:visited {
 	color: white;
 }
 
-a:hover {
+#nav-bar a:hover {
 	color: white;
 }
 
-a:active {
+#nav-bar a:active {
 	color: white;
 }
 
