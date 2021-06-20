@@ -1,7 +1,11 @@
-<%@page import="sagaji.BookDTO"%>
 <%@page import="sagaji.BookDAO"%>
+<%@page import="sagaji.BookDTO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+    pageEncoding="UTF-8"%>
+<%
+	String bookid = request.getParameter("bookid");
+	BookDTO dto = new BookDAO().getBook(bookid);
+%>
 <!DOCTYPE html>
 <html lang="en" style="overflow-y: scroll;">
 <head>
@@ -25,7 +29,7 @@
 }
 
 * {
-	/* border: solid 1px blue; */
+	font-family: 'NotoSansKR';
 	
 }
 
@@ -128,7 +132,7 @@ a {
 	font-family: 'NotoSansKR';
 }
 
-.menu li {
+.menu > li {
 	color:white;
 	float:left;
 	padding:20px 40px;
@@ -173,7 +177,8 @@ a {
 			</div>
 			<ul class="menu">
 				<li><h5><a href="./index.jsp">메인</a></h5></li>
-				<li><h5><a href="./classification.jsp?auth=&comp=&genre=">분류별 도서</a></h5></li>
+				<li><h5><a href="./recommend.jsp">추천 도서</a></h5></li>
+				<li><h5><a href="./classification.jsp">분류별 도서</a></h5></li>
 				<li><h5><a href="./report.jsp">독후감상문</a></h5></li>
 			</ul>
 		</div>
@@ -183,44 +188,39 @@ a {
 	</div>
 	<div class="container">
 		<div class="row">
-			<div class="col-12">
-				<% BookDTO todayBook = new BookDAO().getTodayRecommend(); %>
-				<div><h5 style="font-weight: bold; font-family: 'NotoSansKR'">오늘의 책 ></h5></div>
-				<div class="row">
-					<div class="col-2" style="text-align: center;">
-						<a href="detail.jsp?bookid=<%=todayBook.getBookid() %>">
-							<img src="./books/<%=todayBook.getBookid() %>.png" width="200px" height="300px">
-						</a>
-					</div>
-					<div class="col-4" style="font-family: 'NotoSansKR'">
-						<div><h4 style="font-weight: bold; font-family: 'NotoSansKR'; color: #1f5ec0"><%=todayBook.getBookname() %></h4></div>
-						<div><h5 style="font-weight: bold; font-family: 'NotoSansKR';"><%=todayBook.getAuthor() %></h5></div>
-						<%=todayBook.getStory().length() > 500 ? todayBook.getStory().substring(0, 500) + " ..." : todayBook.getStory() %>
-					</div>
-				</div>
+			<div class="col-auto" style="text-align: center;">
+				<a href="detail.jsp?bookid=<%=dto.getBookid() %>">
+					<img src="books/<%=dto.getBookid() %>.png" width="200px" height="300px" style="border: solid 1px black;">
+				</a>
 			</div>
-		</div>
+			<div class="col-8" style="font-family: 'NotoSansKR'">
+				<div class="row" style="font-size: 20px; font-weight: bold;"><%=dto.getBookname() %></div>
+				<hr>
+				<div class="row"><div style="padding: 0">저자: <b><%=dto.getAuthor() %></b></div></div>
+				<div class="row"><div style="padding: 0">출판: <b><%=dto.getCompany() %></b></div></div>
+				<div class="row"><%=dto.getStory() %></div>
+			</div>
+		</div><hr>
+		<div class="row"><h2>WRITE REVIEW</h2></div>
 		<div class="row">
-			<div class="col-12">
-				<form action="./search.jsp" method="get">
-					<div class="input-group mb-3">
-						<input type="text" class="form-control" placeholder="도서명 검색"
-							aria-describedby="button-addon2" id="search" name="search">
-						<button class="btn btn-outline-secondary" type="submit"
-							id="button-addon2">Search</button>
-						<input type="hidden" name="p" value="1">
-					</div>
-					<div style="font-family: 'NotoSansKR'">
-						<input type="radio" name="searchType" value="0" checked="checked">&nbsp;전체&nbsp;&nbsp;
-						<input type="radio" name="searchType" value="1">&nbsp;제목&nbsp;&nbsp;
-						<input type="radio" name="searchType" value="2">&nbsp;저자
-					</div>
-				</form>
-			</div>	
+			<div class="mb-3">
+			  <label for="exampleFormControlInput1" class="form-label">작성자: <%=session.getAttribute("id") %></label>
+			</div>
+			<form action="./reviewPro.jsp" method="post">
+				<div class="mb-3">
+				  <label for="exampleFormControlTextarea1" class="form-label">Review</label>
+				  <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" maxlength="200" name="contents"></textarea>
+				  <input type="hidden" name="bookid" value="<%=bookid%>">
+				</div>
+		  	<div class="d-grid gap-2">
+		  		<button class="btn btn-outline-primary" type="submit">SEND</button>
+		  	</div>
+			</form>
 		</div>
 	</div>
-	<div class="row">
-		<div id="footer"></div>
+
+	<div class="row" style="z-index: 2">
+		<div id="footer" style="z-index: 3"></div>
 	</div>
 </body>
 </html>

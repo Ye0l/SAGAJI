@@ -20,7 +20,9 @@ create table books(
     genre varchar2(50),
     rating number(5)
 );
-SELECT * FROM BOOKS;
+create sequence book_id_seq start with 10000 increment by 1 maxvalue 9999999 cycle nocache;
+drop sequence book_id_seq;
+delete from books;
 
 select * from books;
 SELECT * FROM (SELECT ROWNUM NUM, RS.* FROM(SELECT * FROM BOOKS WHERE BOOKNAME LIKE '%a%' OR AUTHOR LIKE '%a%') "RS") WHERE NUM BETWEEN 11 AND 20;
@@ -31,11 +33,13 @@ select * from books order by dbms_random.value;
 create table reports(
     reportid number(10) primary key,
     contents varchar(1000),
-    writedate timestamp,
+    writedate timestamp default sysdate,
     books_bookid references books(bookid),
     users_userid references users(userid)
 );
-
+delete from reports;
+drop sequence reports_id_seq;
+create sequence reports_id_seq start with 10000 increment by 1 maxvalue 9999999 cycle nocache;
 SELECT * FROM REPORTS;
 
 create table review(
@@ -45,17 +49,28 @@ create table review(
     books_bookid references books(bookid),
     users_userid references users(userid)
 );
-
+delete from review;
 SELECT * FROM REVIEW;
+SELECT R.* ,(SELECT COUNT(*) FROM COMMENTS C WHERE C.REVIEW_REVIEWID = R.REVIEWID) COMMENTS FROM REVIEW R WHERE BOOKS_BOOKID = 1777;
+
+drop sequence review_id_seq;
+create sequence review_id_seq start with 10000 increment by 1 maxvalue 9999999 cycle nocache;
 
 create table comments(
     commentid number(10) primary key,
     contents varchar2(300),
     rating number(5),
-    writetime timestamp,
+    writetime timestamp default sysdate,
     users_userid references users(userid),
     review_reviewid references review(reviewid)
 );
+delete from comments;
+INSERT INTO COMMENTS(COMMENTID, CONTENTS, USERS_USERID, REVIEW_REVIEWID)
+VALUES(comments_id_seq, 'TEST', 'ADMIN', 4852);
+
+create sequence comments_id_seq start with 10000 increment by 1 maxvalue 9999999 cycle nocache;
+drop sequence comments_id_seq;
 
 SELECT * FROM COMMENTS;
+SELECT * FROM COMMENTS WHERE REVIEW_REVIEWID = 4852;
 

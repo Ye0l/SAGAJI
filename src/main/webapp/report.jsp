@@ -169,8 +169,7 @@ a {
 			</div>
 			<ul class="menu">
 				<li><h5><a href="./index.jsp">메인</a></h5></li>
-				<li><h5><a href="./recommend.jsp">추천 도서</a></h5></li>
-				<li><h5><a href="./classification.jsp">분류별 도서</a></h5></li>
+				<li><h5><a href="./classification.jsp?auth=&comp=&genre=">분류별 도서</a></h5></li>
 				<li><h5><a href="./report.jsp">독후감상문</a></h5></li>
 			</ul>
 		</div>

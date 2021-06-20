@@ -5,10 +5,17 @@
     pageEncoding="UTF-8"%>
 <%
 	request.setCharacterEncoding("utf-8");
-	String search = request.getParameter("search");
-	int p = Integer.parseInt(request.getParameter("p"));
+	String search = ""; 
+	int p = 1;
+	int searchType = 0;
+	try {
+		p = Integer.parseInt(request.getParameter("p"));
+		searchType = Integer.parseInt(request.getParameter("searchType"));
+		search = request.getParameter("search");
+	} catch (Exception e) {
+		log("", e);
+	}
 	BookDAO dao = new BookDAO();
-	int searchType = Integer.parseInt(request.getParameter("searchType"));
 	ArrayList<BookDTO> dtos = dao.searchBook(search, searchType, p);
 	int searchCount = dao.searchCount(search, searchType);
 %>
@@ -187,8 +194,7 @@ body {
 			</div>
 			<ul class="menu">
 				<li><h5><a href="./index.jsp">메인</a></h5></li>
-				<li><h5><a href="./recommend.jsp">추천 도서</a></h5></li>
-				<li><h5><a href="./classification.jsp">분류별 도서</a></h5></li>
+				<li><h5><a href="./classification.jsp?auth=&comp=&genre=">분류별 도서</a></h5></li>
 				<li><h5><a href="./report.jsp">독후감상문</a></h5></li>
 			</ul>
 		</div>

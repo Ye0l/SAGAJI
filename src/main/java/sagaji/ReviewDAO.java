@@ -33,5 +33,22 @@ public class ReviewDAO extends LoginDAO{
 		
 		return dtos;
 	}
+	
+	public void sendReview(String contents, String bookid, String userid) throws SQLException, ClassNotFoundException {
+		Connection con = getConnection();
+		PreparedStatement pstmt = null;
+		
+		String sql = "INSERT INTO REVIEW(REVIEWID, CONTENTS, RATING, BOOKS_BOOKID, USERS_USERID)"
+				+ "VALUES(REVIEW_ID_SEQ.NEXTVAL, ?, ?, ?, ?)";
+				
+		pstmt = con.prepareStatement(sql);
+		pstmt.setString(1, contents);
+		pstmt.setString(2, "5");
+		pstmt.setString(3, bookid);
+		pstmt.setString(4, userid);
+		
+		pstmt.executeQuery();
+		
+	}
 
 }

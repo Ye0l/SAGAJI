@@ -1,7 +1,31 @@
+<%@page import="sagaji.classifyDAO"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="sagaji.BookDTO"%>
+<%@page import="sagaji.BookDAO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+    pageEncoding="UTF-8"%>
+<%
+	classifyDAO cDAO = new classifyDAO();
+	request.setCharacterEncoding("utf-8");
+	
+	String auth = request.getParameter("auth");
+	String comp = request.getParameter("comp");
+	String genre = request.getParameter("genre");
+	
+	String search = ""; 
+	int p = 1;
+	
+	try {
+		p = Integer.parseInt(request.getParameter("p"));
+	} catch (Exception e) {
+		log("", e);
+	}
+	
+	ArrayList<BookDTO> dtos = cDAO.getClassifyBook(auth, comp, genre);
+	int searchCount = cDAO.getClassifyCount(auth, comp, genre);
+%>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="overflow-y: scroll;">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -29,6 +53,7 @@
 
 .container {
 	width: inherit;
+	margin-bottom: 5em;
 }
 
 .row {
@@ -94,7 +119,7 @@ body {
 	overflow: hidden;
 }
 
-a {
+#nav-bar a {
 	text-decoration: none;
 }
 
@@ -144,10 +169,15 @@ a {
 	float:right;
 	padding: 0 1em;
 }
+
+.container .row {
+	margin: 1em;
+}
 </style>
 </head>
 <body>
 	<div class="row">
+		
 		<a href="./index.jsp">
 			<div id="box">
 				<img src="./resource/logo_box.png" style="margin: auto;">
@@ -169,22 +199,94 @@ a {
 			</div>
 			<ul class="menu">
 				<li><h5><a href="./index.jsp">메인</a></h5></li>
-				<li><h5><a href="./recommend.jsp">추천 도서</a></h5></li>
-				<li><h5><a href="./classification.jsp">분류별 도서</a></h5></li>
+				<li><h5><a href="./classification.jsp?auth=&comp=&genre=">분류별 도서</a></h5></li>
 				<li><h5><a href="./report.jsp">독후감상문</a></h5></li>
 			</ul>
 		</div>
 		<div class="col" style="height: 20em;">
 			<div id="banner"></div>
 		</div>
-	</div>	
-	<div class="container">
+	</div>
+	<div class="container" style="z-index: 1">
 		<div class="row">
-			분류별도서
+			<div class="col-12">
+				<form action="classification.jsp" method="get">
+					<select name="auth" class="form-select" aria-label="Default select example">
+						<option value="">작가별 분류</option>
+						<%for(String item : cDAO.getAuthClassify()) { %>
+						<option value="<%=item%>" <%=item.equals(auth) ? "selected" : "" %>><%=item%></option>
+						<% } %>
+					</select>
+					<select name="comp" class="form-select" aria-label="Default select example">
+						<option value="">출판사별 분류</option>
+						<%for(String item : cDAO.getCompClassify()) { %>
+						<option value="<%=item%>" <%=item.equals(comp) ? "selected" : "" %>><%=item%></option>
+						<% } %>
+					</select>
+					<select name="genre" class="form-select" aria-label="Default select example">
+						<option value="">장르별 분류</option>
+						<%for(String item : cDAO.getGenreClassify()) { %>
+						<option value="<%=item%>" <%=item.equals(genre) ? "selected" : "" %>><%=item%></option>
+						<% } %>
+					</select>
+					<div class="d-grid gap-2">
+						<button class="btn btn-outline-primary" type="submit">SEARCH</button>
+					</div>
+				</form>
+			</div>
+			<!-- 검색결과부 -->
+			<% for(BookDTO dto : dtos) { %>
+			<div class="row">
+				<div class="col-4" style="text-align: center;">
+					<a href="detail.jsp?bookid=<%=dto.getBookid() %>">
+						<img src="books/<%=dto.getBookid() %>.png" width="200px" height="300px">
+					</a>
+				</div>
+				<div class="col-8" style="font-family: 'NotoSansKR'">
+					<div class="row" style="font-size: 20px; font-weight: bold;"><%=dto.getBookname() %></div>
+					<hr>
+					<div class="row"><div style="padding: 0">저자: <b><%=dto.getAuthor() %></b></div></div>
+					<div class="row"><div style="padding: 0">출판: <b><%=dto.getCompany() %></b></div></div>
+					<div class="row"><%=dto.getStory() %></div>
+				</div>
+			</div>
+			<hr>
+			<% } %>
+			<!-- 검색결과부 끝 -->
+			<!-- 페이지네이션 -->
+			<nav aria-label="Page navigation example">
+			  <ul class="pagination justify-content-center">
+			  <% if(p==1) { %>
+			    <li class="page-item disabled">
+			      <a class="page-link" href="#" tabindex="-1">Previous</a>
+			    </li>
+			  <% } else { %>
+			    <li class="page-item">
+			      <a class="page-link" href="./classification.jsp?p=<%=p-1 %>&auth=<%=auth %>&comp=<%=comp %>&genre=<%=genre %>" tabindex="-1">Previous</a>
+			    </li>
+			  <% } 
+			  for(int i = 0; i <= (int)searchCount/5; i++) { 
+			  	if(p==(i+1)) {%>
+			  	<li class="page-item active"><a class="page-link" href="./search.jsp?p=<%=i+1 %>&auth=<%=auth %>&comp=<%=comp %>&genre=<%=genre %>"><%=i+1 %></a></li>
+			  	<%} else {%>
+			  	<li class="page-item"><a class="page-link" href="./search.jsp?search=p=<%=i+1 %>&auth=<%=auth %>&comp=<%=comp %>&genre=<%=genre %>"><%=i+1 %></a></li>
+			  <% }} %>
+			  <% if(p==((int)searchCount/5+1)) { %>
+			    <li class="page-item disabled">
+			      <a class="page-link" href="#">Next</a>
+			    </li>
+			  <% } else {%>
+			    <li class="page-item">
+			      <a class="page-link" href="./search.jsp?p=<%=p+1 %>&auth=<%=auth %>&comp=<%=comp %>&genre=<%=genre %>">Next</a>
+			    </li>
+			  <% }%>
+			  </ul>
+			</nav>
+			<!-- 페이지네이션 끝 -->
 		</div>
 	</div>
-	<div class="row">
-		<div id="footer"></div>
+	<div class="row" style="z-index: 2">
+		<div id="footer" style="z-index: 3"></div>
 	</div>
 </body>
 </html>

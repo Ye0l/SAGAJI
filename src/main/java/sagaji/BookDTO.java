@@ -5,6 +5,15 @@ public class BookDTO {
 	private String bookname;
 	private String author;
 	private String company;
+	private String genre;
+	public String getGenre() {
+		return genre;
+	}
+
+	public void setGenre(String genre) {
+		this.genre = genre;
+	}
+
 	private String story;
 	
 	public BookDTO() {

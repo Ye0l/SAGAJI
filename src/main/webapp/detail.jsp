@@ -186,7 +186,6 @@ a {
 			</div>
 			<ul class="menu">
 				<li><h5><a href="./index.jsp">메인</a></h5></li>
-				<li><h5><a href="./recommend.jsp">추천 도서</a></h5></li>
 				<li><h5><a href="./classification.jsp">분류별 도서</a></h5></li>
 				<li><h5><a href="./report.jsp">독후감상문</a></h5></li>
 			</ul>
@@ -228,25 +227,49 @@ a {
 					      <h5 class="mb-1"><%=item.getUserid() %></h5>
 					      <small class="text-muted">SCORE: <%=item.getRating() %>.0/5</small>
 					    </div>
-					    <p class="mb-1"><%=item.getContents() %></p>
+					    <p class="mb-1"><%=item.getContents() %></p><hr>
 					    <%if(Integer.parseInt(item.getComments()) > 0) { %>
-					    	<span class="badge rounded-pill bg-light text-dark">
 						    	<% ArrayList<CommentsDTO> cDtos = new CommentsDAO().getComments(item.getReviewid()); 
 						    	for(CommentsDTO comment : cDtos) {%>
-						    	<h6>
 								    <span class="badge rounded-pill bg-light text-dark"><%=comment.getUserid() %></span>
-								    <span class="badge rounded-pill bg-light text-dark"><%=comment.getContents() %></span>
-								    <span class="badge rounded-pill bg-light text-dark"><%=comment.getWritetime() %></span>
+								    <span class="badge rounded-pill bg-light text-dark"><%=comment.getWritetime() %></span><br>
+						    	<h6 style="font-size: 14px; margin-left: 1em">
+								    <%=comment.getContents() %>
 							    </h6>
 						    	<% } %>
-					    	</span>
 					    <% } %>
+					    <hr>
 					    <div class="col-12">
-					    	<h6><button class="btn btn-secondary" type="button">write comments</button></h6>
-					    </div>
+					    <div class="input-group">
+							<% if(session.getAttribute("id") != null) { %>
+					    	<form action="./commentsPro.jsp" method="post" style="width: 100%">
+					    		<div class="input-group mb-12">
+									  <input type="text" class="form-control" placeholder="WRITE COMMENTS" aria-describedby="button-addon2" name="contents">
+									  <button class="btn btn-outline-secondary" type="submit" id="button-addon2">SEND</button>
+									  <input type="hidden" name="reviewid" value="<%=item.getReviewid()%>">
+									  <input type="hidden" name="bookid" value="<%=bookid %>">
+									</div>
+					    	</form>
+					    <% } %>
+				    	</div>
+				    	</div>
 					  </a>
 					</div>
 				  <% } %>
+				  <div class="list-group">
+							<% if(session.getAttribute("id") == null) { %>
+					  <a class="list-group-item list-group-item-action" href="./login.jsp">
+							<div class="col-auto" style="text-align: center;">
+								로그인 후 리뷰 작성이 가능합니다.
+							</div>
+							<% } else { %>
+					  <a class="list-group-item list-group-item-action" href="./writeReview.jsp?bookid=<%=bookid %>">
+					  	<div class="d-grid gap-2">
+					  	<button class="btn btn-outline-primary" type="button">WRITE NEW REVIEW</button>
+					  	</div>
+					  	<% } %>
+					  </a>
+				  </div>
 				</ul>
 			</div>
 		</div>

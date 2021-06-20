@@ -29,4 +29,19 @@ public class CommentsDAO extends LoginDAO{
 		
 		return dtos;
 	}
+	
+	public void sendComment(String userid, String reviewid, String comments) throws SQLException, ClassNotFoundException{
+		Connection con = getConnection();
+		PreparedStatement pstmt = null;
+		
+		String sql = "INSERT INTO COMMENTS(COMMENTID, CONTENTS, USERS_USERID, REVIEW_REVIEWID)"
+				+ "VALUES(COMMENTS_ID_SEQ.nextval, ?, ?, ?)";
+		
+		pstmt = con.prepareStatement(sql);
+		pstmt.setString(1, comments);
+		pstmt.setString(2, userid);
+		pstmt.setString(3, reviewid);
+		
+		pstmt.executeQuery();
+	}
 }
